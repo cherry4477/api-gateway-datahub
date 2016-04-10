@@ -2,8 +2,7 @@
 <<<<<<< HEAD
 ##1  合作目标：###1.1 形成统一 的账号资源管理。###1.2 集成api数据发布—订购—调用—账单全流程用户体验。
 ##2 合作方案框架
-![github](https://github.com/asiainfoLDP/api-gateway-datahub/api gateway &datahub.jpg “github”)
-![image](http://github.com/asiainfoLDP/api-gateway-datahub/api gateway &datahub.jpg)
+![image](http://github.com/asiainfoLDP/api-gateway-datahub/object.jpg)
 ##3 合作内容
 ###3.1统一用户验证#### a 用户在datahub上登录，获得带tocken的api请求地址。用户请求Api gateway时，api gateway获取到用户的tocken后，先在本次查询tocken是否存在，若本地没有则到datahub登录服务处验证tocken的合法性，若存在则认为合法，同时存储一份到本地。#### **b  请求报文的header Authorization: Token xa12344a** 
  
