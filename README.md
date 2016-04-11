@@ -33,11 +33,10 @@ Authorization: Token **token信息**
 
 * repo/item名称（item名称限制由英文、数字、_ 组成）
 * 更新时间：包括日期 时间，如2015-01-23 11:23:12
-* 详情：接口的主要内容、用途介绍。（文字形式的介绍，如天气api介绍为：全国天气预报，生活指数、实况、PM2.5等信息）**需要以md格式保存**
-* 接口描述：访问方式、接口地址（每个api的接口地址为 https://hub.dataos.io/repo name/item name,此处api name即为itemname）访问的输入输出介绍、错误代码介绍等。 **需要以md格式保存**
-* 请求示例：介绍api请求示例代码、示例返回等。包括curl、pathon、java、c、php等常见的请求示例。**需要以md格式保存**   
-如curl请求示例：curl  --get --include  'https://hub.dataos.io/crdit/name/输入参数=****’  -H 'token:您自己的token'
-示例返回：json示例*******     
+* 详情：接口的主要内容、用途介绍。（文字形式的介绍，如天气api介绍为：全国天气预报，生活指数、实况、PM2.5等信息）
+* 接口描述：访问方式、接口地址（每个api的接口地址为 https://hub.dataos.io/repo name/item name,此处api name即为itemname）访问的输入输出介绍、错误代码介绍等，如下图所示。
+* 请求示例：介绍api请求示例代码、示例返回等。包括curl、pathon、java、c、php等常见的请求示例。如curl请求示例：curl  --get --include  'https://hub.dataos.io/crdit/name/输入参数=****’  -H 'token:您自己的token'
+示例返回：json示例*******
 * 开放、私有属性：二选一。
 * 价格：**元/**条，**天有效。 每个api可有6个价格包。 
 * 服务形式：选择api。
