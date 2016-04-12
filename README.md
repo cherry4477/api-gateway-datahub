@@ -220,6 +220,24 @@ Authorization: Token dcabfefb6ad8feb68e6fbce876fbfe778fb
     ]
 }
 
+输出数据说明（当phase=1的时候）：
+
+	subscriptionid: 订单号
+	sellername: 数据提供者
+	repname: repository name
+	itemname: data item name
+	supply_style: flow | batch 
+	sorttime: 排序时间（== signtime）
+	signtime: 订购时间
+	expiretime: 自动过期时间
+	phase: 1-3, 5-10 (意义：consuming: 1, freezed: 2, finished: 3, cancelled: 5, removed: 6, applying: 7, wthdrawn: 8, denied: 9, complained: 10)
+	plan.id: 价格计划id
+	plan.money: 交易金额
+	plan.units: 最大下载次数（supply_style=batch）,最大下载天数（supply_style=flow)
+	plan.used: 已经使用量　
+	plan.limit: 最多可以订购次数
+	plan.subs: 当前订购次数
+	plan.expire: 交易有效期（天数）
 
 ###4 api gateway标识订单取走状态
 每取走一个订单，则标识该订单为已经取走状态。
