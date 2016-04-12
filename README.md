@@ -14,12 +14,12 @@
 ##3 合作内容
 
 ###3.1统一用户验证
-#### a 用户在datahub上登录，获得请求api的地址、调用api的方式。用户请求Api gateway时，带着用户名、密码，api gateway获取到用户的请求后，以basic方式生成token。
+#### a 用户在datahub上登录，获得请求api的地址、调用api的方式。用户请求Api gateway时，带着用户名、密码，api gateway获取到用户的请求后，以basic方式生成token。 
 
-####basic方式生成token
+#### b basic方式生成token
 Basic base64(用户名:md5(密码))
 
-#### **b  请求报文的header   
+#### c 请求报文的header   
 Authorization: Token **token信息为上一步用basic生成，后续发送获取订单信息或者调用写接口时发送的请求中报头中带上token信息，datahub验证token的真实性后提交给转给具体服务** 
 
  
@@ -175,7 +175,8 @@ Authorization: Token dcabfefb6ad8feb68e6fbce876fbfe778fb
 
 输出样例：  
 
-{
+{  
+
     "total": 100,
     "results": [
         {
