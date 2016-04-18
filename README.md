@@ -30,6 +30,24 @@ Authorization: Token **token信息为上一步用basic生成，后续发送获�
 
 ####b 用户在datahub上创建item，此时单点登录到api gateway上。此时页面向api gateway传递用户tocken、repository名称。Api gateway向现在本地查询tocken的真实性，若本地没有则到datahub登陆服务验证tocken的合法性，若存在则信任，同时存储一份到本地。
 
+微服务组件校验用户Token的方法：
+
+请求报文
+
+GET /valid
+Authorization: Token xa12344a
+User: xxx@aaa.com
+正确回复
+
+HTTP/1.1 200 OK
+
+{"code": 0,"msg": "OK","data": {}}
+错误回复
+
+HTTP/1.1 403 OK
+
+{"code": 1403,"msg": "not valid","data": {}}
+
 ####c 在api gateway上创建repository下的item,api gateway上生成api商品。
 
 ####d Api gateway调用datahub创建item服务创建item
