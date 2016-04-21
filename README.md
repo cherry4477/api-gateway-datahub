@@ -182,77 +182,66 @@ GET /subscriptions/pull/:repname/:itemname?groupbydate=[0|1]&legal=[0|1]&phase={
 
 说明 
 
+	【API网关】查询在某个用户(通过username指定)在某个dataitem上的所有尚未发送给api网关的phase=1的订购
 
-【需求者】查询在某个dataitem上的所有订购 
-
-
+	注意：此api需要传递API网关自己的auth token
+	
 输入参数说明： 
-
-
-groupbydate: (可选，默认为0) 是否按日期分组。  **该字段不需要写**
-
-legal: (可选) 整数(1表示正式签署的订购，等价于phase为1,2或3。0表示未正式签订的订购，等价于phase不等于1,2和3)。如果指定，将压制phase参数。  **该字段不需要写**
-
-phase: (可选) 整数(consuming: 1, freezed: 2, finished: 3, cancelled: 5, removed: 6, applying: 7, wthdrawn: 8, denied: 9, agreed_but_insufficient_balance: 10)。如果此参数未指定或者legal参数被指定，此参数将被忽略。  **此处选择1，为生效状态的订单**
-
-page: (可选, 默认为1) 第几页，最小值为1。  **该字段不需要写**
-
-size: (可选, 默认为30) 每页最多返回多少条数据, 最小值为1, 最大值为100。  **该字段不需要写**
+	
+	username: 订购的需求者。
 
 输入样例： 
 
-GET /subscriptions/pull/repo001/item002 HTTP/1.1  
-
-Accept: application/json 
-
-Authorization: Token dcabfefb6ad8feb68e6fbce876fbfe778fb 
+	GET /subscriptions/pull/repo001/item002?username=zhang3@example.com HTTP/1.1 
+	Accept: application/json
+	Authorization: Token dcabfefb6ad8feb68e6fbce876fbfe778fb
 
 输出样例：  
 
-{  
-
-    "total": 100,
-    "results": [
-        {
-            "subscriptionid": 1234567,
-            "sellername": "li4@example.com",
-            "supply_style":"batch",
-            "sorttime":"2015-11-10T15:04:05Z",
-            "signtime":"2015-11-10T15:04:05Z",
-            "expiretime":"2016-01-15T11:28:21Z",
-            "freezetime":"2015-12-11T10:51:11Z",
-            "finishtime":"2016-01-10T10:51:11Z",
-            "phase":1,
-            "plan":{
-                “id": "222222222",
-                "money":5,
-                "units":3,
-                "used":0,
-                "limit":0,
-                "expire":30
-            }
-        },
-        {
-            "subscriptionid": 1234568,
-            "sellername": li4@example.com",
-            "supply_style":"flow",
-            "sorttime":"2015-11-01T15:04:05Z",
-            "signtime":"2015-11-01T15:04:05Z",
-            "expiretime":"2015-11-04T15:04:05Z"
-            "freezetime":"2015-12-04T15:04:05Z",
-            "finishtime":"2016-01-04T15:04:05Z",
-            "phase":1,
-            "plan":{
-                “id": "33333333",
-                "money":5,
-                "units":3,
-                "used":0,
-                "limit":0,
-                "expire":30
-            }
-        }
-    ]
-}
+	{  
+	
+	    "total": 100,
+	    "results": [
+	        {
+	            "subscriptionid": 1234567,
+	            "sellername": "li4@example.com",
+	            "supply_style":"batch",
+	            "sorttime":"2015-11-10T15:04:05Z",
+	            "signtime":"2015-11-10T15:04:05Z",
+	            "expiretime":"2016-01-15T11:28:21Z",
+	            "freezetime":"2015-12-11T10:51:11Z",
+	            "finishtime":"2016-01-10T10:51:11Z",
+	            "phase":1,
+	            "plan":{
+	                “id": "222222222",
+	                "money":5,
+	                "units":3,
+	                "used":0,
+	                "limit":0,
+	                "expire":30
+	            }
+	        },
+	        {
+	            "subscriptionid": 1234568,
+	            "sellername": li4@example.com",
+	            "supply_style":"flow",
+	            "sorttime":"2015-11-01T15:04:05Z",
+	            "signtime":"2015-11-01T15:04:05Z",
+	            "expiretime":"2015-11-04T15:04:05Z"
+	            "freezetime":"2015-12-04T15:04:05Z",
+	            "finishtime":"2016-01-04T15:04:05Z",
+	            "phase":1,
+	            "plan":{
+	                “id": "33333333",
+	                "money":5,
+	                "units":3,
+	                "used":0,
+	                "limit":0,
+	                "expire":30
+	            }
+	        }
+	    ]
+	}
 
 输出数据说明（当phase=1的时候）：
 
