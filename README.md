@@ -14,13 +14,29 @@
 ##3 合作内容
 
 ###3.1统一用户验证
-#### a 用户在datahub上登录，获得请求api的地址、调用api的方式。用户请求Api gateway时，带着用户名、密码，api gateway获取到用户的请求后，以basic方式生成token。 
+#### a 用户在datahub上登录，获得请求api的地址、调用api的方式。用户请求Api gateway时，带着用户名、token，api gateway获取到用户的请求后，现在本地查询是否存在用户名、token的匹配信息，若查询到则信任。若查询不到，则到datahub上验证用户身份，若验证身份合法，则在本地存储一份用户名、token的匹配关系。验证方式如下：   
+  
+  
+校验用户Token的方法：
 
-#### b basic方式生成token
-Basic base64(用户名:md5(密码))
+请求报文
 
-#### c 请求报文的header   
-Authorization: Token **token信息为上一步用basic生成，后续发送获取订单信息或者调用写接口时发送的请求中报头中带上token信息，datahub验证token的真实性后提交给转给具体服务** 
+	GET /valid
+	Authorization: Token xa12344a
+	User: xxx@aaa.com
+正确回复
+
+	HTTP/1.1 200 OK
+	{"code": 0,"msg": "OK","data": {}}
+错误回复
+
+	HTTP/1.1 403 OK
+	{"code": 1403,"msg": "not valid","data": {}}
+
+
+
+#### b 请求报文的header   
+Authorization: Token **后续发送获取订单信息或者调用写接口时发送的请求中报头中带上token信息，datahub验证token的真实性后提交给转给具体服务** 
 
  
 
@@ -28,7 +44,25 @@ Authorization: Token **token信息为上一步用basic生成，后续发送获�
 ###3.2 信息发布
 ####a 用户在datahub上创建repository。
 
-####b 用户在datahub上创建item，此时单点登录到api gateway上。此时页面向api gateway传递用户tocken、repository名称。Api gateway向现在本地查询tocken的真实性，若本地没有则到datahub登陆服务验证tocken的合法性，若存在则信任，同时存储一份到本地。
+####b 用户在datahub上创建item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称。Api gateway通过cookie获取用户名、token，并在本地查询tocken的真实性，若本地没有则到datahub验证tocken的合法性，若存在则信任，同时存储一份到本地。
+
+校验用户Token的方法：
+
+请求报文
+
+	GET /valid
+	Authorization: Token xa12344a
+	User: xxx@aaa.com
+正确回复
+
+	HTTP/1.1 200 OK
+
+	{"code": 0,"msg": "OK","data": {}}
+错误回复
+
+	HTTP/1.1 403 OK
+
+	{"code": 1403,"msg": "not valid","data": {}}
 
 ####c 在api gateway上创建repository下的item,api gateway上生成api商品。
 
@@ -39,7 +73,7 @@ Authorization: Token **token信息为上一步用basic生成，后续发送获�
 * 详情：接口的主要内容、用途介绍。**md格式保存**（文字形式的介绍，如天气api介绍为：全国天气预报，生活指数、实况、PM2.5等信息）
 * 接口描述：访问方式、接口地址（每个api的接口地址为 https://hub.dataos.io/repo name/item name,此处api name即为itemname）访问的输入输出介绍、错误代码介绍等。 **md格式保存**
 * 请求示例：介绍api请求示例代码、示例返回等。包括curl、pathon、java、c、php等常见的请求示例。**md格式保存**  
-如curl请求示例：curl  --get --include  'https://hub.dataos.io/crdit/name/输入参数=“您的用户名”&“您的密码”'
+如curl请求示例：curl  --get --include  'https://hub.dataos.io/crdit/name/输入参数=“您的用户名”&“您的token”'
 示例返回：json示例*******
 * 开放、私有属性：二选一。
 * 价格：**元/**条，**天有效。 每个api可有6个价格包。 
@@ -50,7 +84,7 @@ Authorization: Token **token信息为上一步用basic生成，后续发送获�
 POST /repositories/:repname/:itemname 
 
 
-说明【拥有者】发布DataItem 
+说明【拥有者】发布DataItem ，此时请求head中带着用户的token
 
 
 输入参数说明 
@@ -140,7 +174,7 @@ Authorization: Token dcabfefb6ad8feb68e6fbce876fbfe778fb
 ####b datahub向api gateway提供查询接口，查询用户的api订单。采用增量查询的方式，并存储在本地做配额控制。 
 ####c datahub提供的查询接口包括如下信息：订单号、订购方、api名、订单配额、订单有效期。
 ####d api网关根据订单配额、订单有效期来做流量控制，这两个因素中有一个达到极限值，则该订单失效。若用户继续调用对应的api，则去查询是否有新的订单生成，若有用新订单的配额；若没有则拒绝调用。
- 查询订单接口如下： 
+ 查询订单接口如下： **此处要变?**
 
  
 GET /subscriptions/pull/:repname/:itemname?groupbydate=[0|1]&legal=[0|1]&phase={phase}&page={page}&size={size} 
@@ -220,21 +254,40 @@ Authorization: Token dcabfefb6ad8feb68e6fbce876fbfe778fb
     ]
 }
 
+输出数据说明（当phase=1的时候）：
 
-###4 api gateway标识订单取走状态
-每取走一个订单，则标识该订单为已经取走状态。
+	subscriptionid: 订单号
+	sellername: 数据提供者
+	repname: repository name
+	itemname: data item name
+	supply_style: flow | batch 
+	sorttime: 排序时间（== signtime）
+	signtime: 订购时间
+	expiretime: 自动过期时间
+	phase: 1-3, 5-10 (意义：consuming: 1, freezed: 2, finished: 3, cancelled: 5, removed: 6, applying: 7, wthdrawn: 8, denied: 9, complained: 10)
+	plan.id: 价格计划id
+	plan.money: 交易金额
+	plan.units: 最大下载次数（supply_style=batch）,最大下载天数（supply_style=flow)
+	plan.used: 已经使用量　
+	plan.limit: 最多可以订购次数
+	plan.subs: 当前订购次数
+	plan.expire: 交易有效期（天数）
+
+###3.4 api gateway标识订单取走状态
+每取走一个订单，则标识该订单为已经取走状态。此时以api gateway的身份置订单取走状态。
 ***此处datahub新增一个写接口。待接口定义好后补充。***  
 
 
-###5 api gateway每天将每条api订单（生效状态的订单，已经完成的订单不需要）的调用次数 
-写入datahub上的订单“已用量”字段中。每天12点写入。
+###3.5 api gateway每天将每条api订单（生效状态的订单，已经完成的订单不需要）的调用次数 写入datahub上的订单“已用量”字段中。 
+每天12点写入。此时以api gateway的身份置每条订单的使用全量。
+
 ***此处datahub新增一个写接口，api gateway确保写入成功。待接口定义好后补充。***  
 
 
-###6 apigate 按月生成每个用户调用详单。
-用户在datahub上查询调用api的详单，单点登录到api gateway。 查询每月的调用量。此处ui特征需要与datahub保持一致。
+###3.6 apigate 按月生成每个用户调用详单。
+用户在datahub上查询调用api的详单，单点登录到api gateway。 查询每月的调用量。此处ui特征需要与datahub保持一致。此处单点登录的方式与3.2一致。
 详单包括 Api name  订单号  调用时间   
 
 
-###7 datahub api访问地址
+###3.7 datahub api访问地址
 https://10.1.235.98/api
