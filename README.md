@@ -84,90 +84,58 @@ Authorization: Token **后续发送获取订单信息或者调用写接口时发
 POST /repositories/:repname/:itemname 
 
 
-说明【拥有者】发布DataItem ，此时请求head中带着用户的token
-
+	说明【拥有者】发布DataItem ，此时请求head中带着用户的token
 
 输入参数说明 
-
-
-itemaccesstype                  访问权限[public(默认), private] 
-
-
-meta                            元数据（详细说明） 
-
-
-sample                          样例数据（请求示例） 
-
-
-comment                         详情 
-
-
-price                           计费计划 
-
-
-price.units                     购买数量 
-
-
-price.money                     价格 
-
-
-price.expire                    有效期(天) 
-
-
-price.limit                     限购次数【可选】 
-
-
-label.sys.supply_style          服务形式[api；batch；flow]【必选】 
-
-
-label.sys.supply_style.api      实时单条 
-
-
-label.sys.supply_style.batch    批量 
-
-
-label.sys.supply_style.flow     流式 
+	
+	itemaccesstype                  访问权限[public(默认), private] 
+	meta                            元数据（详细说明） 
+	sample                          样例数据（请求示例） 
+	comment                         详情 
+	price                           计费计划 
+	price.units                     购买数量 
+	price.money                     价格 
+	price.expire                    有效期(天) 
+	price.limit                     限购次数【可选】 
+	label.sys.supply_style          服务形式[api；batch；flow]【必选】 
+	label.sys.supply_style.api      实时单条 
+	label.sys.supply_style.batch    批量 
+	label.sys.supply_style.flow     流式 
 
 
 Example Request： 
-
-
-POST /repositories/chinamobile/beijingphone HTTP/1.1  
-
-
-Authorization: Token dcabfefb6ad8feb68e6fbce876fbfe778fb 
-
-
-{ 
-
-
-    "itemaccesstype": "private",
-    "meta": "{}",
-    "sample": "{}",
-    "comment": "对终端使用情况、变化情况进行了全方面的分析。包括分品牌统计市场存量、新增、机型、数量、换机等情况。终端与ARPU、DOU、网龄的映射关系。终端的APP安装情况等。",
-    "price":[
-                {
-                    "units": 30,
-                    "money": 5,
-                    "expire":30,
-                    "limit":1,
-                },
-                {
-                    "units": 30,
-                    "money": 5,
-                    "expire":30,
-                    "limit":1,
-                }
-            ],
-    "label": {
-        "sys": {
-            "supply_style": "flow"
-        },
-        "opt": {},
-        "owner": {},
-        "other": {}
-    
-}
+	
+	POST /repositories/chinamobile/beijingphone HTTP/1.1  
+	Authorization: Token dcabfefb6ad8feb68e6fbce876fbfe778fb 
+	
+	{ 
+	    "itemaccesstype": "private",
+	    "meta": "{}",
+	    "sample": "{}",
+	    "comment": "对终端使用情况、变化情况进行了全方面的分析。包括分品牌统计市场存量、新增、机型、数量、换机等情况。终端与ARPU、DOU、网龄的映射关系。终端的APP安装情况等。",
+	    "price":[
+	                {
+	                    "units": 30,
+	                    "money": 5,
+	                    "expire":30,
+	                    "limit":1,
+	                },
+	                {
+	                    "units": 30,
+	                    "money": 5,
+	                    "expire":30,
+	                    "limit":1,
+	                }
+	            ],
+	    "label": {
+	        "sys": {
+	            "supply_style": "flow"
+	        },
+	        "opt": {},
+	        "owner": {},
+	        "other": {}
+	    
+	}
 
 ###3.3 api gateway取订单
 ####a 用户在datahub上订购api（每个api name即为item name），生成订单。
