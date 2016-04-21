@@ -145,14 +145,15 @@ Example Request：
  查询订单接口如下： **此处要变?**
 
  
-GET /subscriptions/pull/:repname/:itemname?groupbydate=[0|1]&legal=[0|1]&phase={phase}&page={page}&size={size} 
+GET /subscriptions/pull/:repname/:itemname?username={username} 
 
 
 说明 
 
 	【API网关】查询在某个用户(通过username指定)在某个dataitem上的所有尚未发送给api网关的phase=1的订购
 
-	注意：此api需要传递API网关自己的auth token
+	注意1：此api需要传递API网关自己的auth token
+	注意2：当成功取得订购并存储在本地后，需调用api#3.4标识订单取走状态
 	
 输入参数说明： 
 	
@@ -168,7 +169,7 @@ GET /subscriptions/pull/:repname/:itemname?groupbydate=[0|1]&legal=[0|1]&phase={
 
 	{  
 	
-	    "total": 100,
+	    "total": 2,
 	    "results": [
 	        {
 	            "subscriptionid": 1234567,
@@ -232,11 +233,76 @@ GET /subscriptions/pull/:repname/:itemname?groupbydate=[0|1]&legal=[0|1]&phase={
 
 ###3.4 api gateway标识订单取走状态
 每取走一个订单，则标识该订单为已经取走状态。此时以api gateway的身份置订单取走状态。
-***此处datahub新增一个写接口。待接口定义好后补充。***  
+
+PUT /subscription/:subscriptionid
+
+说明
+
+	【API网关】回应已经成功取走了某个订购 (action=set_retrieved)
+	
+	注意：此api需要API网关传递自己的auth token
+
+输入参数说明：
+	
+	action: set_retrieved
+	repname: 订购的repname, 供校验用
+	itemname: 订购的itemname, 供校验用
+	username: 订购的需求者, 供校验用
+
+输入样例：
+
+	PUT /subscription/1234567 HTTP/1.1 
+	Accept: application/json
+	Authorization: Token dcabfefb6ad8feb68e6fbce876fbfe778fb
+	
+	{
+		"action": "set_retrieved",
+		"repname": "repo001",
+		"itemname": "item002",
+		"username": "zhang3@example.com"
+	}
+
+输出样例：
+        
+	null
 
 
 ###3.5 api gateway每天将每条api订单（生效状态的订单，已经完成的订单不需要）的调用次数 写入datahub上的订单“已用量”字段中。 
 每天12点写入。此时以api gateway的身份置每条订单的使用全量。
+
+PUT /subscription/:subscriptionid
+
+说明
+
+	【API网关】同步某个订购的已使用量 (action=set_plan_used)
+	
+	注意：此api需要API网关传递自己的auth token
+
+输入参数说明：
+	
+	action: set_plan_used
+	used: 新的使用量
+	repname: 订购的repname, 供校验用
+	itemname: 订购的itemname, 供校验用
+	username: 订购的需求者, 供校验用
+
+输入样例1：
+
+	PUT /subscription/1234567 HTTP/1.1 
+	Accept: application/json
+	Authorization: Token dcabfefb6ad8feb68e6fbce876fbfe778fb
+	
+	{
+		"action": "set_plan_used",
+		"used": 123,
+		"repname": "repo001",
+		"itemname": "item002",
+		"username": "zhang3@example.com"
+	}
+
+输出样例：
+        
+	null
 
 ***此处datahub新增一个写接口，api gateway确保写入成功。待接口定义好后补充。***  
 
