@@ -162,7 +162,7 @@ GET /subscriptions/pull/:repname/:itemname?username={username}
 输入样例： 
 
 	GET /subscriptions/pull/repo001/item002?username=zhang3@example.com HTTP/1.1 
-	Accept: application/json
+	Accept: application/json; charset=utf-8
 	Authorization: Token dcabfefb6ad8feb68e6fbce876fbfe778fb
 
 输出样例：  
@@ -254,7 +254,7 @@ PUT /subscription/:subscriptionid
 输入样例：
 
 	PUT /subscription/1234567 HTTP/1.1 
-	Accept: application/json
+	Accept: application/json; charset=utf-8
 	Authorization: Token dcabfefb6ad8feb68e6fbce876fbfe778fb
 	
 	{
@@ -264,7 +264,13 @@ PUT /subscription/:subscriptionid
 		"username": "zhang3@example.com"
 	}
 
-输出样例：
+输出样例1：
+        
+	HTTP/1.1 200 OK
+	
+	{"code": 0,"msg": "OK"}
+
+输出样例2：
         
 	HTTP/1.1 200 OK
 	
@@ -293,7 +299,7 @@ PUT /subscription/:subscriptionid
 输入样例1：
 
 	PUT /subscription/1234567 HTTP/1.1 
-	Accept: application/json
+	Accept: application/json; charset=utf-8
 	Authorization: Token dcabfefb6ad8feb68e6fbce876fbfe778fb
 	
 	{
@@ -304,14 +310,23 @@ PUT /subscription/:subscriptionid
 		"username": "zhang3@example.com"
 	}
 
-输出样例：
+输出样例1：
         
 	HTTP/1.1 200 OK
+	Content-Type: application/json; charset=utf-8
+	Date: Fri, 22 Apr 2016 09:08:09 GMT
+	Content-Length: 21
 	
-	{"code": 0,"msg": "OK"}
+	{"code":0,"msg":"OK"}
 
-***此处datahub新增一个写接口，api gateway确保写入成功。待接口定义好后补充。***  
+输出样例2：
 
+	HTTP/1.1 400 Bad Request
+	Content-Type: application/json; charset=utf-8
+	Date: Fri, 22 Apr 2016 09:05:41 GMT
+	Content-Length: 92
+	
+	{"code":5043,"msg":"failed to modfiy subscription (subscription is not in consuming phase)"}
 
 ###3.6 apigate 按月生成每个用户调用详单。
 用户在datahub上查询调用api的详单，单点登录到api gateway。 查询每月的调用量。此处ui特征需要与datahub保持一致。此处单点登录的方式与3.2一致。
