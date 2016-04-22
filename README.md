@@ -16,7 +16,7 @@
 ###3.1统一用户验证
 #### a 用户在datahub上登录，获得请求api的地址、调用api的方式。用户请求Api gateway时，带着用户名、token，api gateway获取到用户的请求后，现在本地查询是否存在用户名、token的匹配信息，若查询到则信任。若查询不到，则到datahub上验证用户身份，若验证身份合法，则在本地存储一份用户名、token的匹配关系。验证方式如下：   
   
-  
+
 校验用户Token的方法：
 
 请求报文
@@ -167,6 +167,8 @@ GET /subscriptions/pull/:repname/:itemname?username={username}
 
 输出样例：  
 
+	HTTP/1.1 200 OK
+
 	{  
 	
 	    "total": 2,
@@ -264,7 +266,9 @@ PUT /subscription/:subscriptionid
 
 输出样例：
         
-	null
+	HTTP/1.1 200 OK
+	
+	{"code": 0,"msg": "OK"}
 
 
 ###3.5 api gateway每天将每条api订单（生效状态的订单，已经完成的订单不需要）的调用次数 写入datahub上的订单“已用量”字段中。 
@@ -302,7 +306,9 @@ PUT /subscription/:subscriptionid
 
 输出样例：
         
-	null
+	HTTP/1.1 200 OK
+	
+	{"code": 0,"msg": "OK"}
 
 ***此处datahub新增一个写接口，api gateway确保写入成功。待接口定义好后补充。***  
 
