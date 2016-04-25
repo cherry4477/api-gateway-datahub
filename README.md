@@ -23,7 +23,7 @@
 
 	GET /valid
 	Authorization: Token xa12344a
-	User: xxx@aaa.com
+	Authuser: xxx@aaa.com
 正确回复
 
 	HTTP/1.1 200 OK
@@ -37,6 +37,65 @@
 
 #### b 请求报文的header   
 Authorization: Token **后续发送获取订单信息或者调用写接口时发送的请求中报头中带上token信息，datahub验证token的真实性后提交给转给具体服务** 
+
+
+####c 网关获取自己token的方法
+网关在后续调用datahub写服务时，需要在请求报文的header中带着自己的token，获取token的方法如下：
+#####Basic认证模式通过用户名和md5(密码获取token)，访问的url为/#####
+######请求报文的header######
+
+```
+Authorization: Basic user:password的base64编码
+```
+#####正常情况下返回#####
+```
+HTTP/1.1 200 OK
+Server: openresty/1.9.3.1
+Date: Fri, 08 Jan 2016 05:53:24 GMT
+Content-Type: application/json
+Transfer-Encoding: chunked
+Connection: keep-alive
+
+{"code": 0,"msg": "OK","data": {"token": "ef47b6d4670b90eb3cf75a39f0854b0a"}}
+```
+
+#####用户没有激活#####
+```
+HTTP/1.1 403 Forbidden
+Server: openresty/1.9.3.1
+Date: Fri, 08 Jan 2016 05:53:31 GMT
+Content-Type: application/json
+Transfer-Encoding: chunked
+Connection: keep-alive
+
+{"code": 1102,"msg": "user inactive","data": {}}
+```
+
+#####密码错误5次内返回#####
+```
+HTTP/1.1 403 Forbidden
+Server: openresty/1.9.3.1
+Date: Fri, 08 Jan 2016 05:53:31 GMT
+Content-Type: application/json
+Transfer-Encoding: chunked
+Connection: keep-alive
+
+{"code": 1101,"msg": "username or password not correct","data": {"retry_times": "2","ttl_times":"86400"}}
+```
+#####密码错误5次以后，账户被锁定24小时#####
+
+HTTP/1.1 403 Forbidden
+Server: openresty/1.9.3.1
+Date: Fri, 08 Jan 2016 05:53:35 GMT
+Content-Type: application/json
+Transfer-Encoding: chunked
+Connection: keep-alive
+
+{"code": 1103,"msg": "retry too many times!!","data": {"retry_times": "5","ttl_times":"86399"}}
+```
+####Token认证模式利用上一步获取的token来对需要认证的API提交####
+#####请求报文的header#####
+```Authorization: Token xa12344a```
 
  
 
@@ -142,7 +201,7 @@ Example Request：
 ####b datahub向api gateway提供查询接口，查询用户的api订单。采用增量查询的方式，并存储在本地做配额控制。 
 ####c datahub提供的查询接口包括如下信息：订单号、订购方、api名、订单配额、订单有效期。
 ####d api网关根据订单配额、订单有效期来做流量控制，这两个因素中有一个达到极限值，则该订单失效。若用户继续调用对应的api，则去查询是否有新的订单生成，若有用新订单的配额；若没有则拒绝调用。
- 查询订单接口如下： **此处要变?**
+ 查询订单接口如下：
 
  
 GET /subscriptions/pull/:repname/:itemname?username={username} 
