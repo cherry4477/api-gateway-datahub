@@ -291,7 +291,6 @@ GET /subscriptions/pull/:repname/:itemname?username={username}
 	plan.units: 最大下载次数（supply_style=batch）,最大下载天数（supply_style=flow)
 	plan.used: 已经使用量　
 	plan.limit: 最多可以订购次数
-	plan.subs: 当前订购次数
 	plan.expire: 交易有效期（天数）
 
 ###3.4 api gateway标识订单取走状态
