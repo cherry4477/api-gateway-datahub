@@ -197,6 +197,7 @@ Example Request：
 	}
 
 ###3.3 api gateway取订单
+
 ####a 用户在datahub上订购api（每个api name即为item name），生成订单。
 ####b datahub向api gateway提供查询接口，查询用户的api订单。采用增量查询的方式，并存储在本地做配额控制。 
 ####c datahub提供的查询接口包括如下信息：订单号、订购方、api名、订单配额、订单有效期。
@@ -293,6 +294,7 @@ GET /subscriptions/pull/:repname/:itemname?username={username}
 	plan.expire: 交易有效期（天数）
 
 ###3.4 api gateway标识订单取走状态
+
 每取走一个订单，则标识该订单为已经取走状态。此时以api gateway的身份置订单取走状态。
 
 PUT /subscription/:subscriptionid
@@ -336,7 +338,9 @@ PUT /subscription/:subscriptionid
 	{"code": 0,"msg": "OK"}
 
 
-###3.5 api gateway每天将每条api订单（生效状态的订单，已经完成的订单不需要）的调用次数 写入datahub上的订单“已用量”字段中。 
+###3.5 api gateway每天将每条api订单（生效状态的订单，已经完成的订单不需要）的调用次数
+
+写入datahub上的订单“已用量”字段中。 
 每天12点写入。此时以api gateway的身份置每条订单的使用全量。
 
 PUT /subscription/:subscriptionid
