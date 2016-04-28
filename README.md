@@ -241,8 +241,6 @@ GET /subscriptions/pull/:repname/:itemname?username={username}
 	            "sorttime":"2015-11-10T15:04:05Z",
 	            "signtime":"2015-11-10T15:04:05Z",
 	            "expiretime":"2016-01-15T11:28:21Z",
-	            "freezetime":"2015-12-11T10:51:11Z",
-	            "finishtime":"2016-01-10T10:51:11Z",
 	            "phase":1,
 	            "plan":{
 	                “id": "222222222",
@@ -260,8 +258,6 @@ GET /subscriptions/pull/:repname/:itemname?username={username}
 	            "sorttime":"2015-11-01T15:04:05Z",
 	            "signtime":"2015-11-01T15:04:05Z",
 	            "expiretime":"2015-11-04T15:04:05Z"
-	            "freezetime":"2015-12-04T15:04:05Z",
-	            "finishtime":"2016-01-04T15:04:05Z",
 	            "phase":1,
 	            "plan":{
 	                “id": "33333333",
