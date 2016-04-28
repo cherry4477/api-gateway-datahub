@@ -215,6 +215,7 @@ GET /subscriptions/pull/:repname/:itemname?username={username}
 
 	注意1：此api需要传递API网关自己的auth token
 	注意2：当成功取得订购并存储在本地后，需调用api#3.4标识订单取走状态
+	注意3：此API最多返回100条记录。
 	
 输入参数说明： 
 	
