@@ -104,7 +104,7 @@ Connection: keep-alive
 ###3.2 信息发布
 ####a 用户在datahub上创建repository。
 
-####b 用户在datahub上创建item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称。Api gateway通过cookie获取用户名、token，并在本地查询tocken的真实性，若本地没有则到datahub验证tocken的合法性，若存在则信任，同时存储一份到本地。
+####b 用户在datahub上创建item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,用户名、token(http://plat-dataex.app.dataos.io/dataex-plat/ftl/dataex/api/creator/api_creator?reponame=xx&username=xx&token=xx)，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份到本地。
 
 校验用户Token的方法：
 
