@@ -191,13 +191,16 @@ Example Request：
 	            ],
 	    "label": {
 	        "sys": {
-	            "supply_style": "flow"
+	            "supply_style": "flow",
+	            "dacp": {
+	            	"id": "7FF7B39E-F7AC-41E4-8975-7EAE629DE6DD"
+	            }
 	        },
 	        "opt": {},
 	        "owner": {},
 	        "other": {}
-	    
-	}
+	     }
+        }	     
 
 ###3.3 api gateway取订单
 
