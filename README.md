@@ -161,6 +161,7 @@ POST /repositories/:repname/:itemname
 	label.sys.supply_style.api      实时单条 
 	label.sys.supply_style.batch    批量 
 	label.sys.supply_style.flow     流式 
+	label.sys.dacp.id		dacp id
 
 
 Example Request： 
