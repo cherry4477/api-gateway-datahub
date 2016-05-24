@@ -157,11 +157,11 @@ POST /repositories/:repname/:itemname
 	price.money                     价格 
 	price.expire                    有效期(天) 
 	price.limit                     限购次数【可选】
-	label.sys.dacp.id		dacp id
 	label.sys.supply_style          服务形式[api；batch；flow]【必选】 
 	label.sys.supply_style.api      实时单条 
 	label.sys.supply_style.batch    批量 
-	label.sys.supply_style.flow     流式 
+	label.sys.supply_style.flow     流式
+	label.sys.dacp.id               网关dataitem id                      
 
 
 
