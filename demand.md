@@ -11,9 +11,6 @@
 ![image](https://raw.githubusercontent.com/asiainfoLDP/api-gateway-datahub/master/case.jpg)
 
 ## 页面样式统一调整
-![image](api.jpg)
-    
-## 页面切图
 ![image](https://raw.githubusercontent.com/asiainfoLDP/api-gateway-datahub/master/graphs/images_03.jpg)
 ![image](https://raw.githubusercontent.com/asiainfoLDP/api-gateway-datahub/master/graphs/images_05.jpg)
 ![image](https://raw.githubusercontent.com/asiainfoLDP/api-gateway-datahub/master/graphs/images_07.jpg)
