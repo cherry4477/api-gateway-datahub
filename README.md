@@ -343,7 +343,8 @@ PUT /subscription/:subscriptionid
 ###3.5 api gateway每天将每条api订单（生效状态的订单，已经完成的订单不需要）的调用次数
 
 写入datahub上的订单“已用量”字段中。 
-每天12点写入。此时以api gateway的身份置每条订单的使用全量。
+每天12点写入。此时以api gateway的身份置每条订单的使用全量。  
+若某条订单当天完成，则立即回写使用量。不用等到12点写入。
 
 PUT /subscription/:subscriptionid
 
