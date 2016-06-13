@@ -133,7 +133,7 @@ Connection: keep-alive
 * 详情：接口的主要内容、用途介绍。**md格式保存**（文字形式的介绍，如天气api介绍为：全国天气预报，生活指数、实况、PM2.5等信息）
 * 接口描述：访问方式、接口地址（每个api的接口地址为 https://hub.dataos.io/repo name/item name,此处api name即为itemname）访问的输入输出介绍、错误代码介绍等。 **md格式保存**
 * 请求示例：介绍api请求示例代码、示例返回等。包括curl、pathon、java、c、php等常见的请求示例。**md格式保存**  
-如curl请求示例：curl  --get --include  'https://hub.dataos.io/crdit/name/输入参数=“您的用户名”&“您的token”'
+如curl请求示例：curl  --get --include  'https://hub.dataos.io/crdit/name/username=“您的用户名”&appkey=“您的token”'
 示例返回：json示例*******
 * 开放、私有属性：二选一。
 * 价格：**元/**条，**天有效。 每个api可有6个价格包。 
