@@ -147,7 +147,7 @@ POST /repositories/:repname/:itemname
 	说明【拥有者】发布DataItem ，此时请求head中带着用户的token
 
 输入参数说明 
-	
+	ch_itemname                     dataitem中文名称
 	itemaccesstype                  访问权限[public(默认), private] 
 	meta                            元数据（接口描述） 
 	sample                          样例数据（请求示例） 
