@@ -14,6 +14,26 @@
 ##3 合作内容
 
 ###3.1统一用户验证
+
+**新增datahub和交易所区分字段sregion（武汉WH，广州GZ，哈尔滨HEB，datahub）。**
+
+**用户请求Api gateway时，传递token时sregion字段信息以`+`带在token后面，格式：{token}`+`datahub,{token}`+`WH,{token}`+`GZ,{token}`+`HEB）。**
+
+**Api gateway将接收的token中的sregion拆出来，以`+`拼到username前，格式：{sregion}`+`{username}，校验方式不变。**
+
+说明：
+
+用户请求Api gateway时：
+
+	"token": "ef47b6d4670b90eb3cf75a39f0854b0a+datahub"
+	"username": xx@aaa.com
+
+Api gateway接收信息转换，验证用户身份：
+
+	"token": "ef47b6d4670b90eb3cf75a39f0854b0a"
+	"username": datahub+xx@aaa.com
+（比如3.2发布api时url地址）
+
 #### a 用户在datahub上登录，获得请求api的地址、调用api的方式。用户请求Api gateway时，带着用户名、token，api gateway获取到用户的请求后，现在本地查询是否存在用户名、token的匹配信息，若查询到则信任。若查询不到，则到datahub上验证用户身份，若验证身份合法，则在本地存储一份用户名、token的匹配关系。验证方式如下：   
   
 
@@ -104,7 +124,7 @@ Connection: keep-alive
 ###3.2 信息发布
 ####a 用户在datahub上创建repository。
 
-####b 用户在datahub上创建item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,用户名、token(http://plat.dataex.app-test.dataos.io/dataex-plat/ftl/dataex/api/creator/api_creator?reponame=xx&username=xx&token=xx)，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份到本地。
+####b 用户在datahub上创建item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=xx&username={username}&apitoken={token})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份到本地。
 
 校验用户Token的方法：
 
@@ -133,7 +153,7 @@ Connection: keep-alive
 * 详情：接口的主要内容、用途介绍。**md格式保存**（文字形式的介绍，如天气api介绍为：全国天气预报，生活指数、实况、PM2.5等信息）
 * 接口描述：访问方式、接口地址（每个api的接口地址为 https://hub.dataos.io/repo name/item name,此处api name即为itemname）访问的输入输出介绍、错误代码介绍等。 **md格式保存**
 * 请求示例：介绍api请求示例代码、示例返回等。包括curl、pathon、java、c、php等常见的请求示例。**md格式保存**  
-如curl请求示例：curl  --get --include  'https://hub.dataos.io/crdit/name/输入参数&“您的用户名”&“您的apitoken”'
+如curl请求示例：curl  --get --include  'https://hub.dataos.io/credit/name/输入参数&“您的用户名”&“您的apitoken”'
 示例返回：json示例*******
 * 开放、私有属性：二选一。
 * 价格：**元/**条，**天有效。 每个api可有6个价格包。 
@@ -209,11 +229,11 @@ Example Request：
 ####b datahub向api gateway提供查询接口，查询用户的api订单。采用增量查询的方式，并存储在本地做配额控制。 
 ####c datahub提供的查询接口包括如下信息：订单号、订购方、api名、订单配额、订单有效期。
 ####d api网关根据订单配额、订单有效期来做流量控制，这两个因素中有一个达到极限值，则该订单失效。若用户继续调用对应的api，则去查询是否有新的订单生成，若有用新订单的配额；若没有则拒绝调用。
+
  查询订单接口如下：
 
  
 GET /subscriptions/pull/:repname/:itemname?username={username} 
-
 
 说明 
 
