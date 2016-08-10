@@ -123,10 +123,10 @@ Connection: keep-alive
  
 ###3.2 信息发布、修改、删除
 
-#### 1.用户在datahub上创建repository。
+###用户在datahub上创建repository。
 ---
 
-####a 用户在datahub上创建item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=xx&username={username}&apitoken={token})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份到本地。
+1.用户在datahub上创建item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=xx&username={username}&apitoken={token})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份到本地。
 
 校验用户Token的方法：
 
@@ -146,9 +146,9 @@ Connection: keep-alive
 
 	{"code": 1403,"msg": "not valid","data": {}}
 
-####b 在api gateway上创建repository下的item,api gateway上生成api商品。
+2.在api gateway上创建repository下的item,api gateway上生成api商品。
 
-####c Api gateway调用datahub创建item服务创建item
+3.Api gateway调用datahub创建item服务创建item
 
 * repo/item名称（item名称限制由英文、数字、_ 组成）
 * 更新时间：包括日期 时间，如2015-01-23 11:23:12
@@ -224,13 +224,12 @@ Example Request：
 	     }
         }	     
 
-###2.  用户在datahub上修改已发布的item。
----
-####a 用户在datahub上找到要修改的item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,dataitem名称，用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=xx&itemname=xx&username={username}&apitoken={token})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份到本地。
+####用户在datahub上修改已发布的item。
+1.用户在datahub上找到要修改的item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,dataitem名称，用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=xx&itemname=xx&username={username}&apitoken={token})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份到本地。
 
-####b 在api gateway上修改repository下的item,api gateway上更新api商品信息。
+2.在api gateway上修改repository下的item,api gateway上更新api商品信息。
 
-####c Api gateway调用datahub更新item服务更新item
+3.Api gateway调用datahub更新item服务更新item
 
 * repo/item名称（item名称限制由英文、数字、_ 组成）
 * 更新时间：包括日期 时间，如2015-01-23 11:23:12
@@ -294,12 +293,12 @@ Example Request：
 				],
         "comment": "对终端使用情况、变化情况进行了全方面的分析。包括分品牌统计市场存量、新增、机型、数量、换机等情况。终端与ARPU、DOU、网龄的映射关系。终端的APP安装情况等。"      
     }
-	
-###3.  用户在datahub上删除已发布的item。
----
-####a 用户在datahub上删除的item。
 
-####b Api gateway上同步删除api商品。
+####用户在datahub上删除已发布的item。
+---
+1.用户在datahub上删除的item。
+
+2.Api gateway上同步删除api商品。
 
 
 ###3.3 api gateway取订单
