@@ -123,7 +123,7 @@ Connection: keep-alive
  
 ###3.2 信息发布、修改、删除
 
-###用户在datahub上创建repository。
+####用户在datahub上创建repository。
 ---
 
 a 用户在datahub上创建item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=xx&username={username}&apitoken={token})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份到本地。
@@ -225,6 +225,7 @@ Example Request：
         }	     
 
 ####用户在datahub上修改已发布的item。
+---
 a 用户在datahub上找到要修改的item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,dataitem名称，用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=xx&itemname=xx&username={username}&apitoken={token})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份到本地。
 
 b 在api gateway上修改repository下的item,api gateway上更新api商品信息。
