@@ -126,7 +126,7 @@ Connection: keep-alive
 ###用户在datahub上创建repository。
 ---
 
-1.用户在datahub上创建item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=xx&username={username}&apitoken={token})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份到本地。
+a 用户在datahub上创建item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=xx&username={username}&apitoken={token})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份到本地。
 
 校验用户Token的方法：
 
@@ -146,9 +146,9 @@ Connection: keep-alive
 
 	{"code": 1403,"msg": "not valid","data": {}}
 
-2.在api gateway上创建repository下的item,api gateway上生成api商品。
+b 在api gateway上创建repository下的item,api gateway上生成api商品。
 
-3.Api gateway调用datahub创建item服务创建item
+c Api gateway调用datahub创建item服务创建item
 
 * repo/item名称（item名称限制由英文、数字、_ 组成）
 * 更新时间：包括日期 时间，如2015-01-23 11:23:12
@@ -225,11 +225,11 @@ Example Request：
         }	     
 
 ####用户在datahub上修改已发布的item。
-1.用户在datahub上找到要修改的item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,dataitem名称，用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=xx&itemname=xx&username={username}&apitoken={token})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份到本地。
+a 用户在datahub上找到要修改的item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,dataitem名称，用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=xx&itemname=xx&username={username}&apitoken={token})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份到本地。
 
-2.在api gateway上修改repository下的item,api gateway上更新api商品信息。
+b 在api gateway上修改repository下的item,api gateway上更新api商品信息。
 
-3.Api gateway调用datahub更新item服务更新item
+c Api gateway调用datahub更新item服务更新item
 
 * repo/item名称（item名称限制由英文、数字、_ 组成）
 * 更新时间：包括日期 时间，如2015-01-23 11:23:12
@@ -296,9 +296,9 @@ Example Request：
 
 ####用户在datahub上删除已发布的item。
 ---
-1.用户在datahub上删除的item。
+a 用户在datahub上删除的item。
 
-2.Api gateway上同步删除api商品。
+b Api gateway上同步删除api商品。
 
 
 ###3.3 api gateway取订单
