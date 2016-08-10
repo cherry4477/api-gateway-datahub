@@ -121,10 +121,11 @@ Connection: keep-alive
  
 
  
-###3.2 信息发布
-####a 用户在datahub上创建repository。
+###3.2 信息发布、修改、删除
 
-####b 用户在datahub上创建item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=xx&username={username}&apitoken={token})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份到本地。
+### 1.用户在datahub上创建repository。
+
+####a 用户在datahub上创建item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=xx&username={username}&apitoken={token})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份到本地。
 
 校验用户Token的方法：
 
@@ -144,9 +145,9 @@ Connection: keep-alive
 
 	{"code": 1403,"msg": "not valid","data": {}}
 
-####c 在api gateway上创建repository下的item,api gateway上生成api商品。
+####b 在api gateway上创建repository下的item,api gateway上生成api商品。
 
-####d Api gateway调用datahub创建item服务创建item
+####c Api gateway调用datahub创建item服务创建item
 
 * repo/item名称（item名称限制由英文、数字、_ 组成）
 * 更新时间：包括日期 时间，如2015-01-23 11:23:12
@@ -159,7 +160,6 @@ Connection: keep-alive
 * 价格：**元/**条，**天有效。 每个api可有6个价格包。 
 * 服务形式：选择api。
 * 创建item接口如下：  
-
 
 POST /repositories/:repname/:itemname 
 
@@ -222,6 +222,83 @@ Example Request：
 	        "other": {}
 	     }
         }	     
+
+###2.  用户在datahub上修改已发布的item。
+
+####a 用户在datahub上找到要修改的item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,dataitem名称，用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=xx&itemname=xx&username={username}&apitoken={token})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份到本地。
+
+####b 在api gateway上修改repository下的item,api gateway上更新api商品信息。
+
+####c Api gateway调用datahub更新item服务更新item
+
+* repo/item名称（item名称限制由英文、数字、_ 组成）
+* 更新时间：包括日期 时间，如2015-01-23 11:23:12
+* 详情：接口的主要内容、用途介绍。**md格式保存**（文字形式的介绍，如天气api介绍为：全国天气预报，生活指数、实况、PM2.5等信息）
+* 接口描述：访问方式、接口地址（每个api的接口地址为 https://hub.dataos.io/repo name/item name,此处api name即为itemname）访问的输入输出介绍、错误代码介绍等。 **md格式保存**
+* 请求示例：介绍api请求示例代码、示例返回等。包括curl、pathon、java、c、php等常见的请求示例。**md格式保存**  
+如curl请求示例：curl  --get --include  'https://hub.dataos.io/credit/name/输入参数&“您的用户名”&“您的apitoken”'
+示例返回：json示例*******
+* 开放、私有属性：二选一。
+* 价格：**元/**条，**天有效。 每个api可有6个价格包。 
+* 服务形式：选择api。
+* 更新item接口如下： 
+
+PUT /repositories/:repname/:itemname
+
+	说明【拥有者】更新DataItem
+
+输入参数说明
+
+	ch_itemname                     dataitem中文名称
+	itemaccesstype  				访问权限[public(默认), private]
+	meta							元数据
+	sample							样例数据
+	comment							详情
+    price					        计费计划
+    price.units                     购买数量
+    price.money                     价格
+    price.expire                    有效期(天)
+    price.limit                     限购次数【可选】
+			
+Example Request：
+
+	PUT /repositories/chinamobile/beijingphone HTTP/1.1 
+	Authorization: Token dcabfefb6ad8feb68e6fbce876fbfe778fb
+	{
+	    "ch_itemname": "Dataitem中文名称",
+        "itemaccesstype": "private",
+        "meta": "{}",
+        "sample": "{}",
+		"price":[
+					{
+                    	"units": 30,
+                        "money": 5,
+                        "expire":30,
+                        "limit":1,
+                        "plan_id":"100000000000000000000001"
+                    },
+                    {
+                    	"units": 30,
+                        "money": 5,
+                        "expire":30,
+                        "limit":1,
+                        "plan_id":"100000000000000000000002"
+                    },
+                    {
+                        "units": 30,
+                        "money": 5,
+                        "expire":30,
+                        "limit":1,
+                    }
+				],
+        "comment": "对终端使用情况、变化情况进行了全方面的分析。包括分品牌统计市场存量、新增、机型、数量、换机等情况。终端与ARPU、DOU、网龄的映射关系。终端的APP安装情况等。"      
+    }
+	
+###3.  用户在datahub上删除已发布的item。
+
+####a 用户在datahub上删除的item。
+
+####b Api gateway上同步删除api商品。
 
 ###3.3 api gateway取订单
 
@@ -421,4 +498,4 @@ PUT /subscription/:subscriptionid
 
 
 ###3.7 datahub api访问地址
-https://10.1.235.99/api
+https://10.1.235.98/api
