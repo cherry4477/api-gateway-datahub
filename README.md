@@ -251,15 +251,15 @@ PUT /repositories/:repname/:itemname
 输入参数说明
 
 	ch_itemname                     dataitem中文名称
-	itemaccesstype  				访问权限[public(默认), private]
-	meta							元数据
-	sample							样例数据
-	comment							详情
-    price					        计费计划
-    price.units                     购买数量
-    price.money                     价格
-    price.expire                    有效期(天)
-    price.limit                     限购次数【可选】
+	itemaccesstype  		访问权限[public(默认), private]
+	meta                            元数据（接口描述） 
+	sample                          样例数据（请求示例） 
+	comment				详情
+    	price			        计费计划
+    	price.units                     购买数量
+    	price.money                     价格
+    	price.expire                    有效期(天)
+    	price.limit                     限购次数【可选】
 			
 Example Request：
 
