@@ -109,8 +109,9 @@ Connection: keep-alive
 
 **新增datahub和交易所区分字段sregion（武汉WH，广州GZ，哈尔滨HEB，datahub）。**
 
-####用户在datahub上创建repository。
----
+
+####3.2.1 用户在datahub上创建repository。
+
 
 a 用户在datahub上创建item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=${reponame}&username=${sregion+username}&apitoken=${token})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份sregion`+`username 与 token信息到本地。
 
@@ -218,8 +219,8 @@ Example Request：
 	     }
         }	     
 
-####用户在datahub上修改已发布的item。
----
+####3.2.2 用户在datahub上修改已发布的item。
+
 a 用户在datahub上找到要修改的item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,dataitem名称，用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=${reponame}&itemname=${itemname}&username=${sregion’+‘username}&apitoken=${token})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份sregion`+`username 与 token信息到本地。
 
 校验用户Token的方法：
@@ -314,8 +315,8 @@ Example Request：
         "comment": "对终端使用情况、变化情况进行了全方面的分析。包括分品牌统计市场存量、新增、机型、数量、换机等情况。终端与ARPU、DOU、网龄的映射关系。终端的APP安装情况等。"      
     }
 
-####用户在datahub上删除已发布的item。
----
+####3.2.3 用户在datahub上删除已发布的item。
+
 a 用户在datahub上删除的item。
 
 datahub上删除Item的同时调用Api gateway的删除接口。
@@ -388,7 +389,7 @@ GET /subscriptions/pull/:repname/:itemname?username={sregion’+‘username}
 	    "results": [
 	        {
 	            "subscriptionid": 1234567,
-	            "sellername": "li4@example.com",
+	            "sellername": "datahub+li4@example.com",
 	            "supply_style":"batch",
 	            "sorttime":"2015-11-10T15:04:05Z",
 	            "signtime":"2015-11-10T15:04:05Z",
@@ -405,7 +406,7 @@ GET /subscriptions/pull/:repname/:itemname?username={sregion’+‘username}
 	        },
 	        {
 	            "subscriptionid": 1234568,
-	            "sellername": li4@example.com",
+	            "sellername": datahub+li4@example.com",
 	            "supply_style":"flow",
 	            "sorttime":"2015-11-01T15:04:05Z",
 	            "signtime":"2015-11-01T15:04:05Z",
@@ -546,5 +547,8 @@ PUT /subscription/:subscriptionid
 
 
 ###3.7 datahub api访问地址
-stage环境 https://10.1.235.99/api
+stage环境 https://10.1.235.99/api  
+
 测试环境 https://10.1.235.98/api
+
+生产环境 https://hub.dataos.io/api
