@@ -273,18 +273,19 @@ PUT /repositories/:repname/:itemname
 	meta                            元数据（接口描述） 
 	sample                          样例数据（请求示例） 
 	comment				详情
-    	price			        计费计划
-    	price.units                     购买数量
-    	price.money                     价格
-    	price.expire                    有效期(天)
-    	price.limit                     限购次数【可选】
+	price			        计费计划
+	price.units                     购买数量
+	price.money                     价格
+	price.expire                    有效期(天)
+	price.limit                     限购次数【可选】
 			
 Example Request：
 
 	PUT /repositories/chinamobile/beijingphone HTTP/1.1 
 	Authorization: Token dcabfefb6ad8feb68e6fbce876fbfe778fb
 	{
-	    "ch_itemname": "Dataitem中文名称",
+	
+      	"ch_itemname": "Dataitem中文名称",
         "itemaccesstype": "private",
         "meta": "{}",
         "sample": "{}",
@@ -316,9 +317,11 @@ Example Request：
 ####用户在datahub上删除已发布的item。
 ---
 a 用户在datahub上删除的item。
-  datahub上删除Item的同时调用Api gateway的删除接口。
+
+datahub上删除Item的同时调用Api gateway的删除接口。
   
 b Api gateway上同步删除api商品。
+
 请Api gateway提供删除的接口，建议删除接口包含信息：用户名，reponame,itemname。
 
 
