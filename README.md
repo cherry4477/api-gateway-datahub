@@ -126,7 +126,7 @@ Connection: keep-alive
 ####用户在datahub上创建repository。
 ---
 
-a 用户在datahub上创建item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=xx&username={username}&apitoken={token})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份到本地。
+a 用户在datahub上创建item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=xx&username={username}&apitoken={token}+{sregion})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份到本地。
 
 校验用户Token的方法：
 
@@ -155,7 +155,7 @@ c Api gateway调用datahub创建item服务创建item
 * 详情：接口的主要内容、用途介绍。**md格式保存**（文字形式的介绍，如天气api介绍为：全国天气预报，生活指数、实况、PM2.5等信息）
 * 接口描述：访问方式、接口地址（每个api的接口地址为 https://hub.dataos.io/repo name/item name,此处api name即为itemname）访问的输入输出介绍、错误代码介绍等。 **md格式保存**
 * 请求示例：介绍api请求示例代码、示例返回等。包括curl、pathon、java、c、php等常见的请求示例。**md格式保存**  
-如curl请求示例：curl  --get --include  'https://hub.dataos.io/credit/name/输入参数&“您的用户名”&“您的apitoken”'
+如curl请求示例：curl  --get --include  'https://hub.dataos.io/reponame/apiname/输入参数&“您的用户名”&“您的apitoken”'
 示例返回：json示例*******
 * 开放、私有属性：二选一。
 * 价格：**元/**条，**天有效。 每个api可有6个价格包。 
