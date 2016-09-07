@@ -15,20 +15,8 @@
 
 ###3.1统一用户验证
 
-说明：
 
-用户请求Api gateway时：
-
-	"token": "ef47b6d4670b90eb3cf75a39f0854b0a"
-	"username": xx@aaa.com
-
-Api gateway接收信息转换，验证用户身份：
-
-	"token": "ef47b6d4670b90eb3cf75a39f0854b0a"
-	"username": xx@aaa.com
-
-
-#### a 用户在datahub上登录，获得请求api的地址、调用api的方式。用户请求Api gateway时，带着用户名、token，api gateway获取到用户的请求后，现在本地查询是否存在用户名、token的匹配信息，若查询到则信任。若查询不到，则到datahub上验证用户身份，若验证身份合法，则在本地存储一份用户名、token的匹配关系。验证方式如下：   
+#### a 用户在datahub上登录，获得请求api的地址、调用api的方式。用户请求Api gateway时，带着sregion‘+‘username、token，api gateway获取到用户的请求后，现在本地查询是否存在sregion‘+‘username、token的匹配信息，若查询到则信任。若查询不到，则到datahub上验证用户身份，若验证身份合法，则在本地存储一份sregion‘+‘username、token的匹配关系，（sregion‘+’username  为区分用户唯一性标识）。验证方式如下：   
   
 
 校验用户Token的方法：
@@ -50,16 +38,16 @@ Api gateway接收信息转换，验证用户身份：
 
 
 #### b 请求报文的header   
-Authorization: Token **后续发送获取订单信息或者调用写接口时发送的请求中报头中带上token信息，datahub验证token的真实性后提交给转给具体服务** 
+Authorization: Token **后续发送获取订单信息或者调用写接口时发送的请求中报头中带上token信息，datahub验证token的真实性后转给具体服务** 
 
 
 ####c 网关获取自己token的方法
 网关在后续调用datahub写服务时，需要在请求报文的header中带着自己的token，获取token的方法如下：
-#####Basic认证模式通过用户名和md5(密码获取token)，访问的url为/
+#####Basic认证模式通过sregion、username、md5(密码获取token).此时:sregion=datahub，username=lipeng7@asiainfo.com
 ######请求报文的header
 
 ```
-Authorization: Basic user:password的base64编码
+Authorization: Basic sregion’+‘userneme:password的base64编码
 ```
 #####正常情况下返回
 ```
@@ -112,7 +100,9 @@ Connection: keep-alive
 
 ```Authorization: Token xa12344a```
 
- 
+ 说明：
+
+
 
  
 ###3.2 信息发布、修改、删除
@@ -122,7 +112,7 @@ Connection: keep-alive
 ####用户在datahub上创建repository。
 ---
 
-a 用户在datahub上创建item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=${reponame}&username=${username}&apitoken=${token})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份到本地。
+a 用户在datahub上创建item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=${reponame}&username=${sregion+username}&apitoken=${token})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份sregion`+`username 与 token信息到本地。
 
 校验用户Token的方法：
 
@@ -136,13 +126,15 @@ a 用户在datahub上创建item，此时单点登录到api gateway上。此时�
 	HTTP/1.1 200 OK
 
 	{"code": 0,"msg": "OK","data": {'sregion':'datahub'}}
+**Api gateway验证用户成功，此时获取sregion信息。**
+
 错误回复
 
 	HTTP/1.1 403 OK
 
 	{"code": 1403,"msg": "not valid","data": {}}
 
-**Api gateway验证用户成功，此时获取sregion信息，用`+`拼到username前，即：username=sregion`+`username。**
+
 
 b 在api gateway上创建repository下的item,api gateway上生成api商品。
 
@@ -152,9 +144,12 @@ c Api gateway调用datahub创建item服务创建item
 * 更新时间：包括日期 时间，如2015-01-23 11:23:12
 * 详情：接口的主要内容、用途介绍。**md格式保存**（文字形式的介绍，如天气api介绍为：全国天气预报，生活指数、实况、PM2.5等信息）
 * 接口描述：访问方式、接口地址（每个api的接口地址为 https://hub.dataos.io/repo name/item name,此处api name即为itemname）访问的输入输出介绍、错误代码介绍等。 **md格式保存**
-* 请求示例：介绍api请求示例代码、示例返回等。**md格式保存**  
+* 请求示例：介绍api请求示例代码、示例返回等。此处为固定模板，用户不可编辑。模板内容为：**md格式保存**  
 包括curl、pathon、java、c、php等常见的请求示例。
-如：curl请求示例模板化，不可编辑：curl  --get --include  'https://hub.dataos.io/reponame/itemname/输入参数'
+如：curl请求示例模板化，不可编辑：curl  --get --include  'https://hub.dataos.io/reponame/itemname?输入参数'    
+
+（此处reponame/itemname/输入参数需要需要拼成，其中reponame、itemname是api本身的name，输入参数部分由用户申明的api输入参数、输入参数默认值构成，如http://api.dataos.io/Finance/ThemeHeat?themeID=1&beginDate=20150501&endDate=20150530"）  
+
   示例返回：json示例*******
 * 开放、私有属性：二选一。
 * 价格：**元/**条，**天有效。 每个api可有6个价格包。 
@@ -225,7 +220,7 @@ Example Request：
 
 ####用户在datahub上修改已发布的item。
 ---
-a 用户在datahub上找到要修改的item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,dataitem名称，用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=${reponame}&itemname=${itemname}&username=${username}&apitoken=${token})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份到本地。
+a 用户在datahub上找到要修改的item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,dataitem名称，用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=${reponame}&itemname=${itemname}&username=${sregion’+‘username}&apitoken=${token})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份sregion`+`username 与 token信息到本地。
 
 校验用户Token的方法：
 
@@ -245,7 +240,7 @@ a 用户在datahub上找到要修改的item，此时单点登录到api gateway�
 
 	{"code": 1403,"msg": "not valid","data": {}}
 
-**Api gateway验证用户成功，此时获取sregion信息，用`+`拼到username前，即：username=sregion`+`username。**
+**Api gateway验证用户成功，此时获取sregion信息。**
 
 b 在api gateway上修改repository下的item,api gateway上更新api商品信息。
 
@@ -255,9 +250,12 @@ c Api gateway调用datahub更新item服务更新item
 * 更新时间：包括日期 时间，如2015-01-23 11:23:12
 * 详情：接口的主要内容、用途介绍。**md格式保存**（文字形式的介绍，如天气api介绍为：全国天气预报，生活指数、实况、PM2.5等信息）
 * 接口描述：访问方式、接口地址（每个api的接口地址为 https://hub.dataos.io/repo name/item name,此处api name即为itemname）访问的输入输出介绍、错误代码介绍等。 **md格式保存**
-* 请求示例：介绍api请求示例代码、示例返回等。**md格式保存**  
+* 请求示例：介绍api请求示例代码、示例返回等。此处为固定模板，用户不可编辑。模板内容为：**md格式保存**  
 包括curl、pathon、java、c、php等常见的请求示例。
-如：curl请求示例模板化，不可编辑：curl  --get --include  'https://hub.dataos.io/reponame/itemname/输入参数'
+如：curl请求示例模板化，不可编辑：curl  --get --include  'https://hub.dataos.io/reponame/itemname?输入参数'    
+
+（此处reponame/itemname/输入参数需要需要拼成，其中reponame、itemname是api本身的name，输入参数部分由用户申明的api输入参数、输入参数默认值构成，如http://api.dataos.io/Finance/ThemeHeat?themeID=1&beginDate=20150501&endDate=20150530"  ）
+
   示例返回：json示例*******
 * 开放、私有属性：二选一。
 * 价格：**元/**条，**天有效。 每个api可有6个价格包。 
@@ -324,6 +322,8 @@ datahub上删除Item的同时调用Api gateway的删除接口。
   
 b Api gateway上同步删除api商品。
 
+**调用Api gateway删除接口，返回删除结果到datahub。（请提供删除的接口，建议删除接口包含信息：sregion’+‘username，token，reponame,itemname)。**
+
 
 校验用户Token的方法：
 
@@ -343,11 +343,9 @@ b Api gateway上同步删除api商品。
 
 	{"code": 1403,"msg": "not valid","data": {}}
 
-**Api gateway验证用户成功，此时获取sregion信息，用`+`拼到username前，即：username=sregion`+`username。**
+**Api gateway验证用户成功，则认为用户是合法用户，执行删除请求。**
 
-调用Api gateway删除接口，返回删除结果到datahub。（请提供删除的接口，建议删除接口包含信息：用户名，reponame,itemname)。
 
-同步执行删除操作。
 
 
 ###3.3 api gateway取订单
@@ -360,13 +358,13 @@ b Api gateway上同步删除api商品。
  查询订单接口如下：
 
  
-GET /subscriptions/pull/:repname/:itemname?username={username} 
+GET /subscriptions/pull/:repname/:itemname?username={sregion’+‘username} 
 
 说明 
 
-	【API网关】查询在某个用户(通过username指定)在某个dataitem上的所有尚未发送给api网关的phase=1的订购
+	【API网关】查询在某个用户(通过sregion’+‘username指定)在某个dataitem上的所有尚未发送给api网关的phase=1的订购
 
-	注意1：此api需要传递API网关自己的auth token
+	注意1：此api请求报头中需要传递API网关自己的auth token
 	注意2：当成功取得订购并存储在本地后，需调用api#3.4标识订单取走状态
 	注意3：此API最多返回100条记录。
 	
@@ -376,7 +374,7 @@ GET /subscriptions/pull/:repname/:itemname?username={username}
 
 输入样例： 
 
-	GET /subscriptions/pull/repo001/item002?username=zhang3@example.com HTTP/1.1 
+	GET /subscriptions/pull/repo001/item002?username=datahub+zhang3@example.com HTTP/1.1 
 	Accept: application/json; charset=utf-8
 	Authorization: Token dcabfefb6ad8feb68e6fbce876fbfe778fb
 
@@ -453,7 +451,7 @@ PUT /subscription/:subscriptionid
 
 	【API网关】回应已经成功取走了某个订购 (action=set_retrieved)
 	
-	注意：此api需要API网关传递自己的auth token
+	注意：此api请求报头中需要API网关传递自己的auth token
 
 输入参数说明：
 	
@@ -500,7 +498,7 @@ PUT /subscription/:subscriptionid
 
 	【API网关】同步某个订购的已使用量 (action=set_plan_used)
 	
-	注意：此api需要API网关传递自己的auth token
+	注意：此api请求报头中需要API网关传递自己的auth token
 
 输入参数说明：
 	
@@ -548,4 +546,5 @@ PUT /subscription/:subscriptionid
 
 
 ###3.7 datahub api访问地址
-https://10.1.235.98/api
+stage环境 https://10.1.235.99/api
+测试环境 https://10.1.235.98/api
