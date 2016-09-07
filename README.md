@@ -15,10 +15,6 @@
 
 ###3.1统一用户验证
 
-**新增datahub和交易所区分字段sregion（武汉WH，广州GZ，哈尔滨HEB，datahub）。**
-
-**校验用户Token时，Api gateway获取sregion信息，以`+`拼到username前，格式：{sregion}`+`{username}，校验方式不变。**
-
 说明：
 
 用户请求Api gateway时：
@@ -121,10 +117,12 @@ Connection: keep-alive
  
 ###3.2 信息发布、修改、删除
 
+**新增datahub和交易所区分字段sregion（武汉WH，广州GZ，哈尔滨HEB，datahub）。**
+
 ####用户在datahub上创建repository。
 ---
 
-a 用户在datahub上创建item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=xx&username={username}&apitoken={token})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份到本地。
+a 用户在datahub上创建item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=${reponame}&username=${username}&apitoken=${token})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份到本地。
 
 校验用户Token的方法：
 
@@ -137,12 +135,14 @@ a 用户在datahub上创建item，此时单点登录到api gateway上。此时�
 
 	HTTP/1.1 200 OK
 
-	{"code": 0,"msg": "OK","data": {}}
+	{"code": 0,"msg": "OK","data": {'sregion':'datahub'}}
 错误回复
 
 	HTTP/1.1 403 OK
 
 	{"code": 1403,"msg": "not valid","data": {}}
+
+**Api gateway验证用户成功，此时获取sregion信息，用`+`拼到username前，即：username=sregion`+`username。**
 
 b 在api gateway上创建repository下的item,api gateway上生成api商品。
 
@@ -224,7 +224,27 @@ Example Request：
 
 ####用户在datahub上修改已发布的item。
 ---
-a 用户在datahub上找到要修改的item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,dataitem名称，用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=xx&itemname=xx&username={username}&apitoken={token})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份到本地。
+a 用户在datahub上找到要修改的item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,dataitem名称，用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=${reponame}&itemname=${itemname}&username=${username}&apitoken=${token})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份到本地。
+
+校验用户Token的方法：
+
+请求报文
+
+	GET /valid
+	Authorization: Token xa12344a
+	User: xxx@aaa.com
+正确回复
+
+	HTTP/1.1 200 OK
+
+	{"code": 0,"msg": "OK","data": {'sregion':'datahub'}}
+错误回复
+
+	HTTP/1.1 403 OK
+
+	{"code": 1403,"msg": "not valid","data": {}}
+
+**Api gateway验证用户成功，此时获取sregion信息，用`+`拼到username前，即：username=sregion`+`username。**
 
 b 在api gateway上修改repository下的item,api gateway上更新api商品信息。
 
@@ -296,8 +316,10 @@ Example Request：
 ####用户在datahub上删除已发布的item。
 ---
 a 用户在datahub上删除的item。
-
+  datahub上删除Item的同时调用Api gateway的删除接口。
+  
 b Api gateway上同步删除api商品。
+请Api gateway提供删除的接口，建议删除接口包含信息：用户名，reponame,itemname。
 
 
 ###3.3 api gateway取订单
