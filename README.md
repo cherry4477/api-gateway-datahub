@@ -153,7 +153,7 @@ c Api gateway调用datahub创建item服务创建item
 * 详情：接口的主要内容、用途介绍。**md格式保存**（文字形式的介绍，如天气api介绍为：全国天气预报，生活指数、实况、PM2.5等信息）
 * 接口描述：访问方式、接口地址（每个api的接口地址为 https://hub.dataos.io/repo name/item name,此处api name即为itemname）访问的输入输出介绍、错误代码介绍等。 **md格式保存**
 * 请求示例：介绍api请求示例代码、示例返回等。包括curl、pathon、java、c、php等常见的请求示例。**md格式保存**  
-如curl请求示例：curl  --get --include  'https://hub.dataos.io/reponame/apiname/输入参数&“您的用户名”&“您的apitoken”'
+curl请求示例模板话，不可编辑：curl  --get --include  'https://hub.dataos.io/reponame/itemname/输入参数'
 示例返回：json示例*******
 * 开放、私有属性：二选一。
 * 价格：**元/**条，**天有效。 每个api可有6个价格包。 
@@ -255,7 +255,7 @@ c Api gateway调用datahub更新item服务更新item
 * 详情：接口的主要内容、用途介绍。**md格式保存**（文字形式的介绍，如天气api介绍为：全国天气预报，生活指数、实况、PM2.5等信息）
 * 接口描述：访问方式、接口地址（每个api的接口地址为 https://hub.dataos.io/repo name/item name,此处api name即为itemname）访问的输入输出介绍、错误代码介绍等。 **md格式保存**
 * 请求示例：介绍api请求示例代码、示例返回等。包括curl、pathon、java、c、php等常见的请求示例。**md格式保存**  
-如curl请求示例：curl  --get --include  'https://hub.dataos.io/credit/name/输入参数&“您的用户名”&“您的apitoken”'
+curl请求示例模板话，不可编辑：curl  --get --include  'https://hub.dataos.io/reponame/itemname/输入参数'
 示例返回：json示例*******
 * 开放、私有属性：二选一。
 * 价格：**元/**条，**天有效。 每个api可有6个价格包。 
@@ -322,7 +322,30 @@ datahub上删除Item的同时调用Api gateway的删除接口。
   
 b Api gateway上同步删除api商品。
 
-请Api gateway提供删除的接口，建议删除接口包含信息：用户名，reponame,itemname。
+
+校验用户Token的方法：
+
+请求报文
+
+	GET /valid
+	Authorization: Token xa12344a
+	User: xxx@aaa.com
+正确回复
+
+	HTTP/1.1 200 OK
+
+	{"code": 0,"msg": "OK","data": {'sregion':'datahub'}}
+错误回复
+
+	HTTP/1.1 403 OK
+
+	{"code": 1403,"msg": "not valid","data": {}}
+
+**Api gateway验证用户成功，此时获取sregion信息，用`+`拼到username前，即：username=sregion`+`username。**
+
+调用Api gateway删除接口，返回删除结果到datahub。（请提供删除的接口，建议删除接口包含信息：用户名，reponame,itemname)。
+
+同步执行删除操作。
 
 
 ###3.3 api gateway取订单
