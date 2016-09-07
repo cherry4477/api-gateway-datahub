@@ -17,22 +17,20 @@
 
 **新增datahub和交易所区分字段sregion（武汉WH，广州GZ，哈尔滨HEB，datahub）。**
 
-**用户请求Api gateway时，传递token时sregion字段信息以`+`带在token后面，格式：{token}`+`datahub,{token}`+`WH,{token}`+`GZ,{token}`+`HEB）。**
-
-**Api gateway将接收的token中的sregion拆出来，以`+`拼到username前，格式：{sregion}`+`{username}，校验方式不变。**
+**校验用户Token时，Api gateway获取sregion信息，以`+`拼到username前，格式：{sregion}`+`{username}，校验方式不变。**
 
 说明：
 
 用户请求Api gateway时：
 
-	"token": "ef47b6d4670b90eb3cf75a39f0854b0a+datahub"
+	"token": "ef47b6d4670b90eb3cf75a39f0854b0a"
 	"username": xx@aaa.com
 
 Api gateway接收信息转换，验证用户身份：
 
 	"token": "ef47b6d4670b90eb3cf75a39f0854b0a"
-	"username": datahub+xx@aaa.com
-（比如3.2发布api时url地址）
+	"username": xx@aaa.com
+
 
 #### a 用户在datahub上登录，获得请求api的地址、调用api的方式。用户请求Api gateway时，带着用户名、token，api gateway获取到用户的请求后，现在本地查询是否存在用户名、token的匹配信息，若查询到则信任。若查询不到，则到datahub上验证用户身份，若验证身份合法，则在本地存储一份用户名、token的匹配关系。验证方式如下：   
   
@@ -47,7 +45,7 @@ Api gateway接收信息转换，验证用户身份：
 正确回复
 
 	HTTP/1.1 200 OK
-	{"code": 0,"msg": "OK","data": {}}
+	{"code": 0,"msg": "OK","data": {"sregion":"datahub"}}
 错误回复
 
 	HTTP/1.1 403 OK
@@ -126,7 +124,7 @@ Connection: keep-alive
 ####用户在datahub上创建repository。
 ---
 
-a 用户在datahub上创建item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=xx&username={username}&apitoken={token}+{sregion})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份到本地。
+a 用户在datahub上创建item，此时单点登录到api gateway上。此时页面向api gateway传递repository名称,用户名、token(http://http://plat-dataex.app-dacp.dataos.io/dataex-plat/ldp/api?reponame=xx&username={username}&apitoken={token})，并在本地查询token的真实性，若本地没有则到datahub验证token的合法性，若存在则信任，同时存储一份到本地。
 
 校验用户Token的方法：
 
