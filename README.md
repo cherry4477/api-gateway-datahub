@@ -47,7 +47,7 @@ Authorization: Token **后续发送获取订单信息或者调用写接口时发
 ######请求报文的header
 
 ```
-Authorization: Basic sregion’+‘userneme:password的base64编码
+Authorization: Basic sregion’+‘username:password的base64编码
 ```
 #####正常情况下返回
 ```
@@ -149,7 +149,7 @@ c Api gateway调用datahub创建item服务创建item
 包括curl、pathon、java、c、php等常见的请求示例。
 如：curl请求示例模板化，不可编辑：curl  --get --include  'https://hub.dataos.io/reponame/itemname?输入参数'    
 
-（此处reponame/itemname/输入参数需要需要拼成，其中reponame、itemname是api本身的name，输入参数部分由用户申明的api输入参数、输入参数默认值构成，如http://api.dataos.io/Finance/ThemeHeat?themeID=1&beginDate=20150501&endDate=20150530"）  
+（此处reponame/itemname/输入参数需要需要拼成，其中reponame、itemname是api本身的name，输入参数部分由用户申明的api输入参数、输入参数默认值构成，如http://api.dataos.io/Finance/ThemeHeat?themeID=1&beginDate=20150501&endDate=20150530）  
 
   示例返回：json示例*******
 * 开放、私有属性：二选一。
@@ -255,7 +255,7 @@ c Api gateway调用datahub更新item服务更新item
 包括curl、pathon、java、c、php等常见的请求示例。
 如：curl请求示例模板化，不可编辑：curl  --get --include  'https://hub.dataos.io/reponame/itemname?输入参数'    
 
-（此处reponame/itemname/输入参数需要需要拼成，其中reponame、itemname是api本身的name，输入参数部分由用户申明的api输入参数、输入参数默认值构成，如http://api.dataos.io/Finance/ThemeHeat?themeID=1&beginDate=20150501&endDate=20150530"  ）
+（此处reponame/itemname/输入参数需要需要拼成，其中reponame、itemname是api本身的name，输入参数部分由用户申明的api输入参数、输入参数默认值构成，如http://api.dataos.io/Finance/ThemeHeat?themeID=1&beginDate=20150501&endDate=20150530）
 
   示例返回：json示例*******
 * 开放、私有属性：二选一。
